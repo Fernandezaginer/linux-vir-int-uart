@@ -75,7 +75,7 @@ namespace nerfnet
       {
         response[i] = serialGetchar(fd);
         printf("%d", response[i]);
-        i++
+        i++;
       }
       if (timeout_us != 0 && (start_us + timeout_us) < TimeNowUs())
       {
