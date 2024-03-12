@@ -59,6 +59,7 @@ namespace nerfnet
     for (uint8_t val : request)
     {
       serialPutchar(fd, val);
+      printf("%d", val);
     }
     return RequestResult::Success;
   }
@@ -73,6 +74,7 @@ namespace nerfnet
       if (serialDataAvail(fd))
       {
         response[i] = serialGetchar(fd);
+        printf("%d", response[i]);
         i++
       }
       if (timeout_us != 0 && (start_us + timeout_us) < TimeNowUs())
