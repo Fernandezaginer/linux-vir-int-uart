@@ -98,7 +98,7 @@ namespace nerfnet
     }
 
     std::vector<uint8_t> response(kMaxPacketSize, 0x00);
-    result = Receive(response, /*timeout_us=*/100000);
+    result = Receive(response, /*timeout_us=*/1000000);
     if (result != RequestResult::Success)
     {
       LOGE("Failed to receive tunnel reset response");
@@ -138,7 +138,7 @@ namespace nerfnet
     }
 
     std::vector<uint8_t> response(kMaxPacketSize);
-    result = Receive(response, /*timeout_us=*/100000);
+    result = Receive(response, /*timeout_us=*/1000000);
     if (result != RequestResult::Success)
     {
       LOGE("Failed to receive network tunnel txrx request");
