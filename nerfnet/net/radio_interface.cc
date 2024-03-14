@@ -73,20 +73,24 @@ namespace nerfnet
     uint64_t start_us = TimeNowUs();
     while (i < response.size())
     {
-      printf("RX: ");
       if (serialDataAvail(fd))
       {
+        if (i == 0)
+        {
+          printf("RX: ");
+        }
         response[i] = serialGetchar(fd);
         printf("%d", response[i]);
         i++;
       }
-      printf("\n");
       if (timeout_us != 0 && (start_us + timeout_us) < TimeNowUs())
       {
+        printf("\n");
         LOGE("Timeout receiving response");
         return RequestResult::Timeout;
       }
     }
+    printf("\n");
     return RequestResult::Success;
   }
 
