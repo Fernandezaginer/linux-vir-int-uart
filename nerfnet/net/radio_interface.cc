@@ -56,11 +56,13 @@ namespace nerfnet
   RadioInterface::RequestResult RadioInterface::Send(
       const std::vector<uint8_t> &request)
   {
+    printf("TX: ");
     for (uint8_t val : request)
     {
       serialPutchar(fd, val);
       printf("%d", val);
     }
+    printf("\n");
     return RequestResult::Success;
   }
 
@@ -71,12 +73,14 @@ namespace nerfnet
     uint64_t start_us = TimeNowUs();
     while (i < response.size())
     {
+      printf("RX: ");
       if (serialDataAvail(fd))
       {
         response[i] = serialGetchar(fd);
         printf("%d", response[i]);
         i++;
       }
+      printf("\n");
       if (timeout_us != 0 && (start_us + timeout_us) < TimeNowUs())
       {
         LOGE("Timeout receiving response");
