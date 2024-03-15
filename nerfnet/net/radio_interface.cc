@@ -28,7 +28,7 @@
 #include "nerfnet/util/log.h"
 #include "nerfnet/util/time.h"
 
-#define DEVICE_UART "/dev/ttyS0"
+#define DEVICE_UART "/dev/serial0"
 #define SPEED_UART 9600
 
 namespace nerfnet

@@ -1,9 +1,12 @@
 
 
 #include <stdio.h>
+#include <uinstd.h>
+#include <fcntl.h>
+#include <termios.h>
 #include <wiringPi.h>
 
-#define DEVICE_UART "/dev/ttyS0"
+#define DEVICE_UART "/dev/serial0"
 #define SPEED_UART 9600
 
 
@@ -15,7 +18,7 @@ int main(void){
   }
 
   int fd;
-  fd = serialOpen(DEVICE_UART, SPEED_UART)
+  fd = serialOpen(DEVICE_UART, SPEED_UART);
   int i = 0;
   
   while(1){
