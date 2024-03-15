@@ -15,11 +15,7 @@ int main(void){
   }
 
   int fd;
-  if (fd = serialOpen(DEVICE_UART, SPEED_UART)){
-	printf("serialOpen(DEVICE_UART, \n");
-	return -1;
-  }
-
+  fd = serialOpen(DEVICE_UART, SPEED_UART)
   int i = 0;
   
   while(1){
