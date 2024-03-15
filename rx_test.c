@@ -15,7 +15,7 @@ int main(void){
   }
 
   int fd;
-  if (fd = serialOpen(DEVICE_UART, SPEED_UART)) < 0){
+  if (fd = serialOpen(DEVICE_UART, SPEED_UART)){
 	printf("serialOpen(DEVICE_UART, \n");
 	return -1;
   }
