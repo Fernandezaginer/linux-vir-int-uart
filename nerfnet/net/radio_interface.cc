@@ -29,7 +29,7 @@
 #include "nerfnet/util/time.h"
 
 #define DEVICE_UART "/dev/serial0"
-#define SPEED_UART 115200
+#define SPEED_UART 921600
 
 namespace nerfnet
 {
@@ -58,13 +58,13 @@ namespace nerfnet
   RadioInterface::RequestResult RadioInterface::Send(
       const std::vector<uint8_t> &request)
   {
-    printf("TX: ");
+    // printf("TX: ");
     for (uint8_t val : request)
     {
       serialPutchar(fd, val);
-      printf("%d", val);
+      // printf("%d", val);
     }
-    printf("\n");
+    // printf("\n");
     return RequestResult::Success;
   }
 
@@ -79,15 +79,15 @@ namespace nerfnet
       {
         if (i == 0)
         {
-          printf("RX: ");
+          // printf("RX: ");
         }
         response[i] = serialGetchar(fd);
-        printf("%d", response[i]);
+        // printf("%d", response[i]);
         i++;
       }
       if (timeout_us != 0 && (start_us + timeout_us) < TimeNowUs())
       {
-        printf("\n");
+        // printf("\n");
         LOGE("Timeout receiving response");
         return RequestResult::Timeout;
       }
