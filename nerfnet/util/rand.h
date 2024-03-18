@@ -14,19 +14,24 @@
  * limitations under the License.
  */
 
-#ifndef NERFNET_UTIL_STRING_H_
-#define NERFNET_UTIL_STRING_H_
+#ifndef NERFNET_UTIL_RAND_H_
+#define NERFNET_UTIL_RAND_H_
 
-#include <string>
+#include <limits>
+#include <random>
 
 namespace nerfnet {
 
-// Formats the supplied arguments into a string and returns it.
-std::string StringFormat(const char* format, ...);
-
-// Builds a hex string from the supplied string.
-std::string StringFormatHex(const std::string& str);
+// Generate a random number in a given range.
+template<typename T>
+T Random(T min = std::numeric_limits<T>::min(),
+         T max = std::numeric_limits<T>::max()) {
+  std::random_device random_device;
+  std::mt19937 generator(random_device());
+  std::uniform_int_distribution<T> distribution(min, max);
+  return distribution(generator);
+}
 
 }  // namespace nerfnet
 
-#endif  // NERFNET_UTIL_STRING_H_
+#endif  // NERFNET_UTIL_RAND_H_

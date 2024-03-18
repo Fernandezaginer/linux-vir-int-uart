@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Andrew Rossignol andrew.rossignol@gmail.com
+ * Copyright 2021 Andrew Rossignol andrew.rossignol@gmail.com
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,19 +14,23 @@
  * limitations under the License.
  */
 
-#ifndef NERFNET_UTIL_STRING_H_
-#define NERFNET_UTIL_STRING_H_
+#ifndef NERFNET_UTIL_FILE_H_
+#define NERFNET_UTIL_FILE_H_
 
+#include <google/protobuf/message.h>
 #include <string>
 
 namespace nerfnet {
 
-// Formats the supplied arguments into a string and returns it.
-std::string StringFormat(const char* format, ...);
+// Read the contents of the supplied file into a string.
+// Returns true if successful, false otherwise.
+bool ReadFileToString(const std::string& filename, std::string* contents);
 
-// Builds a hex string from the supplied string.
-std::string StringFormatHex(const std::string& str);
+// Reads the contents of the supplied file into a protobuf message.
+// Returns true if successful, false otherwise.
+bool ReadTextProtoFileToMessage(const std::string& filename,
+    google::protobuf::Message* message);
 
 }  // namespace nerfnet
 
-#endif  // NERFNET_UTIL_STRING_H_
+#endif  // NERFNET_UTIL_FILE_H_

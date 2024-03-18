@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Andrew Rossignol andrew.rossignol@gmail.com
+ * Copyright 2021 Andrew Rossignol andrew.rossignol@gmail.com
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,19 +14,11 @@
  * limitations under the License.
  */
 
-#ifndef NERFNET_UTIL_STRING_H_
-#define NERFNET_UTIL_STRING_H_
-
-#include <string>
+#include "nerfnet/net/link.h"
 
 namespace nerfnet {
 
-// Formats the supplied arguments into a string and returns it.
-std::string StringFormat(const char* format, ...);
-
-// Builds a hex string from the supplied string.
-std::string StringFormatHex(const std::string& str);
+Link::Link(uint32_t address)
+    : address_(address) {}
 
 }  // namespace nerfnet
-
-#endif  // NERFNET_UTIL_STRING_H_

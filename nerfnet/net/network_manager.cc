@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Andrew Rossignol andrew.rossignol@gmail.com
+ * Copyright 2021 Andrew Rossignol andrew.rossignol@gmail.com
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,19 +14,23 @@
  * limitations under the License.
  */
 
-#ifndef NERFNET_UTIL_STRING_H_
-#define NERFNET_UTIL_STRING_H_
+#include "nerfnet/net/network_manager.h"
 
-#include <string>
+#include "nerfnet/util/log.h"
 
 namespace nerfnet {
 
-// Formats the supplied arguments into a string and returns it.
-std::string StringFormat(const char* format, ...);
+void NetworkManager::OnBeaconReceived(TransportManager* transport_manager,
+    uint32_t address) {
+  LOGI("Beacon received from %u", address);
+}
 
-// Builds a hex string from the supplied string.
-std::string StringFormatHex(const std::string& str);
+void NetworkManager::OnRequest(TransportManager* transport_manager,
+    uint32_t address, const Request& request) {
+  LOGI("Request received from %u", address);
+  if (request.has_hello()) {
+    LOGI("Hello greeting: '%s'", request.hello().greeting().c_str());
+  }
+}
 
 }  // namespace nerfnet
-
-#endif  // NERFNET_UTIL_STRING_H_

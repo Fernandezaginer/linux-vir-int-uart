@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Andrew Rossignol andrew.rossignol@gmail.com
+ * Copyright 2021 Andrew Rossignol andrew.rossignol@gmail.com
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,19 +14,12 @@
  * limitations under the License.
  */
 
-#ifndef NERFNET_UTIL_STRING_H_
-#define NERFNET_UTIL_STRING_H_
-
-#include <string>
+#include "nerfnet/net/transport.h"
 
 namespace nerfnet {
 
-// Formats the supplied arguments into a string and returns it.
-std::string StringFormat(const char* format, ...);
-
-// Builds a hex string from the supplied string.
-std::string StringFormatHex(const std::string& str);
+Transport::Transport(Link* link, EventHandler* event_handler)
+    : link_(link),
+      event_handler_(event_handler) {}
 
 }  // namespace nerfnet
-
-#endif  // NERFNET_UTIL_STRING_H_

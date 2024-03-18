@@ -30,4 +30,19 @@ uint64_t TimeNowUs() {
             std::chrono::steady_clock::now().time_since_epoch()).count();
 }
 
+uint64_t RealClock::TimeNowUs() const {
+  return ::nerfnet::TimeNowUs();
+}
+
+MockClock::MockClock()
+    : time_us_(0) {}
+
+uint64_t MockClock::TimeNowUs() const {
+  return time_us_;
+}
+
+void MockClock::SetTimeUs(uint64_t time_us) {
+  time_us_ = time_us;
+}
+
 }  // namespace nerfnet

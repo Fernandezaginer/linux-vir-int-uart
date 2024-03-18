@@ -1,0 +1,81 @@
+/*
+ * Copyright 2021 Andrew Rossignol andrew.rossignol@gmail.com
+ * 
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * 
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+syntax = "proto2";
+
+package nerfnet;
+
+/*
+ * Hello
+ *
+ * A simple hello message that is typically only used during development. The
+ * 'Hello' message pair implements a simple round-tripped integer. The response
+ * contains the value, but incremented by one.
+ */
+
+message HelloRequest {
+  // The value to round-trip.
+  optional uint32 value = 1;
+
+  // The greeting to round-trip.
+  optional string greeting = 2;
+};
+
+message HelloResponse {
+  // The value sent as part of the request, but incremented by one.
+  optional uint32 value = 1;
+
+  // The greeting that was sent as-is.
+  optional string greeting = 2;
+};
+
+/*
+ * NetworkFrame
+ *
+ * A union of all request/response pairs supported in nerfnet.
+ */
+
+message Request {
+  oneof request {
+    HelloRequest hello = 1;
+  };
+};
+
+message Response {
+  oneof response {
+    HelloResponse hello = 1;
+  };
+};
+
+message NetworkFrame {
+  // The address of the node that originally sent the request. This allows the
+  // destination to prepare a response that traverses multiple hops in the
+  // network.
+  optional uint32 source_address = 1;
+
+  // The path for this packet to take on the network. If this field is empty,
+  // the packet is ignored. If this field contains a single address that matches
+  // the current node, the packet is processed, otherwise it is ignored. If this
+  // field contains more than one address, the first address is removed from the
+  // list and the packet is forwarded to that address.
+  repeated uint32 destination_address = 2;
+
+  // A union of request/response to fit into a simple network frame.
+  oneof payload {
+    Request request = 10;
+    Response response = 11;
+  };
+};

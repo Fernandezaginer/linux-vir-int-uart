@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Andrew Rossignol andrew.rossignol@gmail.com
+ * Copyright 2021 Andrew Rossignol andrew.rossignol@gmail.com
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,19 +14,29 @@
  * limitations under the License.
  */
 
-#ifndef NERFNET_UTIL_STRING_H_
-#define NERFNET_UTIL_STRING_H_
+#include <gtest/gtest.h>
 
-#include <string>
+#include "nerfnet/util/log.h"
+#include "nerfnet/util/encode_decode.h"
 
 namespace nerfnet {
+namespace {
 
-// Formats the supplied arguments into a string and returns it.
-std::string StringFormat(const char* format, ...);
+TEST(EncodeDecodeTest, EncodeU32) {
+  EXPECT_EQ(EncodeU32(0xdeadbeef), "\xef\xbe\xad\xde");
+}
 
-// Builds a hex string from the supplied string.
-std::string StringFormatHex(const std::string& str);
+TEST(EncodeDecodeTest, EncodeU16) {
+  EXPECT_EQ(EncodeU16(0xdead), "\xad\xde");
+}
 
+TEST(EncodeDecodeTest, Decode32) {
+  EXPECT_EQ(DecodeU32("\xef\xbe\xad\xde"), 0xdeadbeef);
+}
+
+TEST(EncodeDecodeTest, Decode16) {
+  EXPECT_EQ(DecodeU16("\xef\xbe"), 0xbeef);
+}
+
+}  // anonymous namespace
 }  // namespace nerfnet
-
-#endif  // NERFNET_UTIL_STRING_H_
