@@ -77,10 +77,10 @@ namespace nerfnet
     {
       if (serialDataAvail(fd))
       {
-        if (i == 0)
-        {
-          // printf("RX: ");
-        }
+        // if (i == 0)
+        // {
+        //   printf("RX: ");
+        // }
         response[i] = serialGetchar(fd);
         // printf("%d", response[i]);
         i++;
