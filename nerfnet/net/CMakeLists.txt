@@ -15,15 +15,17 @@ target_include_directories(nerfnet PRIVATE
   ${tclap_INCLUDE_DIRS}
 )
 
+find_library(WIRINGPI_LIB wiringPi)
+
 target_link_libraries(nerfnet PUBLIC
   link
   pthread
   network_manager
   radio_transport
-  rf24
   transport_manager
   util_string
   util_time
+  ${WIRINGPI_LIB}
 )
 
 # nerfnet proto ################################################################
@@ -102,6 +104,7 @@ target_link_libraries(radio_transport PUBLIC
   transport
   radio_transport_receiver
   util_time
+  ${WIRINGPI_LIB}
 )
 
 add_executable(radio_transport_test
