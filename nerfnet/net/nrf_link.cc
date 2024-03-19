@@ -136,7 +136,7 @@ namespace nerfnet
     // radio_.read(raw_frame.data(), raw_frame.size());
     if (pipe_id != kBroadcastPipe && pipe_id != kDirectedPipe)
     {
-      LOGW("Received packet from invalid pipe: %" PRIu8, pipe_id);
+      LOGW("Received packet from invalid pipe: %", pipe_id);
       return ReceiveResult::RECEIVE_ERROR;
     }
 
