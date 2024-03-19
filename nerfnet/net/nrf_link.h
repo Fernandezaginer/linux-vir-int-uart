@@ -19,6 +19,7 @@
 
 #include "nerfnet/net/link.h"
 #include <array>
+#include <optional>
 
 namespace nerfnet
 {
