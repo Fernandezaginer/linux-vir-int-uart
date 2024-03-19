@@ -24,7 +24,7 @@ find_package(Protobuf REQUIRED)
 
 pkg_check_modules(tclap REQUIRED tclap)
 
-message(${GTEST_INCLUDE_DIRS})
+# message(${GTEST_INCLUDE_DIRS})
 
 include_directories(${GTEST_INCLUDE_DIRS})
 include_directories(${PROJECT_SOURCE_DIR})
