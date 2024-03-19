@@ -18,6 +18,7 @@
 #define NERFNET_NET_NRF_LINK_H_
 
 #include "nerfnet/net/link.h"
+#include <array>
 
 namespace nerfnet
 {
