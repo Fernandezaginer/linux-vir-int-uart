@@ -138,6 +138,7 @@ namespace nerfnet
         mesh_frames_.pop();
 
         uint32_t next_address = frame.destination_address()[0];
+        frame.destination_address()[0] = 0;
         // frame.mutable_destination_address()->erase(0);
         // *frame.mutable_destination_address() = {0, 0};
 
