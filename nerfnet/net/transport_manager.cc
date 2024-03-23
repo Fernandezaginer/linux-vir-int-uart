@@ -139,8 +139,9 @@ namespace nerfnet
 
         uint32_t next_address = frame.destination_address()[0];
         // frame.destination_address()[0] = 0;
-        frame.mutable_destination_address()->erase(0);
+        // frame.mutable_destination_address()->erase(0);
         // *frame.mutable_destination_address() = {0, 0};
+        frame.mutable_destination_address()->erase(frame.mutable_destination_address()->begin());
 
         std::string serialized_frame;
         if (frame.SerializeToString(&serialized_frame))

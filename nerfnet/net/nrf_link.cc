@@ -168,6 +168,11 @@ namespace nerfnet
 
     // TODO-NFM
 
+        for (int i = 0; i < raw_frame.size(); i++)
+    {
+      serialPutchar(fd, raw_frame.data()[i]);
+    }
+
     // if (!radio_.write(raw_frame.data(), raw_frame.size()))
     // {
     //   LOGE("Failed to write beacon");
