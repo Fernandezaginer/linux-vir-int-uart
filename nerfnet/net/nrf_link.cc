@@ -23,7 +23,7 @@
 #include <wiringPi.h>
 #include <wiringSerial.h>
 #define DEVICE_UART "/dev/serial0"
-#define SPEED_UART 921600
+#define SPEED_UART 115200
 
 namespace nerfnet
 {
@@ -74,7 +74,8 @@ namespace nerfnet
 
     // TODO-NFM:
     CHECK((wiringPiSetup() != -1), "Unable to initialize WiringPi");
-    CHECK(((fd = serialOpen(DEVICE_UART, SPEED_UART)) >= 0), "Unable to open serial");
+    fd = serialOpen(DEVICE_UART, SPEED_UART);
+    // CHECK((fd >= 0), "Unable to open serial");
     LOGI("Serial Port OK");
 
     // Open reading pipes for the broadcast address and address of this node.
@@ -168,7 +169,7 @@ namespace nerfnet
 
     // TODO-NFM
 
-        for (int i = 0; i < raw_frame.size(); i++)
+    for (int i = 0; i < raw_frame.size(); i++)
     {
       serialPutchar(fd, raw_frame.data()[i]);
     }
