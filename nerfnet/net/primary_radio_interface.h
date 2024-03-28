@@ -20,12 +20,6 @@
 #include <optional>
 #include "nerfnet/net/radio_interface.h"
 
-#define SPEED_UART 115200
-
-#define DEFAULT_UART "/dev/serial0"
-#define RPI5_UART "/dev/ttyAMA0"
-#define RPI5_HOST "raspberrypi5"
-
 namespace nerfnet
 {
 
