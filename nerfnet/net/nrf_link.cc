@@ -135,11 +135,11 @@ namespace nerfnet
 
     // RawFrame raw_frame = {};
     // radio_.read(raw_frame.data(), raw_frame.size());
-    if (pipe_id != kBroadcastPipe && pipe_id != kDirectedPipe)
-    {
-      LOGW("Received packet from invalid pipe: %", pipe_id);
-      return ReceiveResult::RECEIVE_ERROR;
-    }
+    // if (pipe_id != kBroadcastPipe && pipe_id != kDirectedPipe)
+    // {
+    //   LOGW("Received packet from invalid pipe: %", pipe_id);
+    //   return ReceiveResult::RECEIVE_ERROR;
+    // }
 
     frame->address = (raw_frame[0]) | (static_cast<uint32_t>(raw_frame[1]) << 8) | (static_cast<uint32_t>(raw_frame[2]) << 16) | (static_cast<uint32_t>(raw_frame[3]) << 24);
 
