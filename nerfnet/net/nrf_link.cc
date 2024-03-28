@@ -22,8 +22,6 @@
 // Leem:
 #include <wiringPi.h>
 #include <wiringSerial.h>
-#define DEVICE_UART "/dev/serial0"
-#define SPEED_UART 115200
 
 namespace nerfnet
 {
@@ -63,19 +61,23 @@ namespace nerfnet
     CHECK(address != 0, "Address cannot be 0");
     CHECK(address != kBroadcastAddress, "Cannot use the broadcast address");
     CHECK(channel < 128, "Channel must be between 0 and 127");
-    // CHECK(radio_.begin(), "Failed to start NRF24L01");
-    // radio_.setChannel(channel);
-    // radio_.setPALevel(RF24_PA_MAX);
-    // radio_.setDataRate(RF24_2MBPS);
-    // radio_.setAddressWidth(4);
-    // radio_.setAutoAck(0);
-    // radio_.setCRCLength(RF24_CRC_16);
-    // CHECK(radio_.isChipConnected(), "NRF24L01 is unavailable");
 
-    // TODO-NFM:
+    // Auto detect host:
+    char hostname[256];
+    char serial_dev[256];
+    gethostname(hostname, sizeof(hostname));
+    printf("Detected host: %s\n", hostname);
+    if (strcmp(RPI5_HOST, hostname) == 0)
+    {
+      strcpy(serial_dev, RPI5_UART);
+    }
+    else
+    {
+      strcpy(serial_dev, DEFAULT_UART);
+    }
+
     CHECK((wiringPiSetup() != -1), "Unable to initialize WiringPi");
-    fd = serialOpen(DEVICE_UART, SPEED_UART);
-    // CHECK((fd >= 0), "Unable to open serial");
+    fd = serialOpen(serial_dev, SPEED_UART);
     LOGI("Serial Port OK");
 
     // Open reading pipes for the broadcast address and address of this node.
