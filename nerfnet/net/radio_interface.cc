@@ -44,7 +44,7 @@ namespace nerfnet
     char hostname[256];
     char serial_dev[256];
     gethostname(hostname, sizeof(hostname));
-    printf("Detected host: %s", hostname);
+    printf("Detected host: %s\n", hostname);
     if (strcmp(RPI5_HOST, hostname) == 0)
     {
       strcpy(serial_dev, RPI5_UART);
@@ -102,7 +102,7 @@ namespace nerfnet
         return RequestResult::Timeout;
       }
     }
-    printf("\n");
+    // printf("\n");
     return RequestResult::Success;
   }
 
