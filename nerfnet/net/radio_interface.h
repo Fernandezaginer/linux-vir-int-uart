@@ -71,7 +71,7 @@ namespace nerfnet
     static constexpr uint32_t kPollIntervalUs = 1000;
 
     // The maximum size of a packet.
-    static constexpr size_t kMaxPacketSize = 512;
+    static constexpr size_t kMaxPacketSize = 256;
     static constexpr size_t kMaxPayloadSize = kMaxPacketSize - 2;
 
     // The default pipe to use for sending data.
