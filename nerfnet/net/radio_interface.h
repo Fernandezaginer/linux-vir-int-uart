@@ -26,7 +26,7 @@
 
 #include "nerfnet/util/non_copyable.h"
 
-#define SPEED_UART 115200
+#define SPEED_UART 921600
 
 #define DEFAULT_UART "/dev/serial0"
 #define RPI5_UART "/dev/ttyAMA0"
@@ -71,7 +71,7 @@ namespace nerfnet
     static constexpr uint32_t kPollIntervalUs = 1000;
 
     // The maximum size of a packet.
-    static constexpr size_t kMaxPacketSize = 256;
+    static constexpr size_t kMaxPacketSize = 4096;
     static constexpr size_t kMaxPayloadSize = kMaxPacketSize - 2;
 
     // The default pipe to use for sending data.
