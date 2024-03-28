@@ -14,8 +14,6 @@
  * limitations under the License.
  */
 
-// Hola lucas
-
 #include "nerfnet/net/radio_interface.h"
 
 #include <unistd.h>
@@ -27,9 +25,6 @@
 
 #include "nerfnet/util/log.h"
 #include "nerfnet/util/time.h"
-
-#define DEVICE_UART "/dev/serial0"
-#define SPEED_UART 921600
 
 namespace nerfnet
 {
@@ -44,8 +39,23 @@ namespace nerfnet
         next_id_(1),
         tunnel_logs_enabled_(false)
   {
+
+    // Auto detect host:
+    char hostname[256];
+    char serial_dev[256];
+    gethostname(hostname, sizeof(hostname));
+    printf("Detected host: %s", hostname);
+    if (strcmp(RPI5_HOST, hostname) == 0)
+    {
+      strcpy(serial_dev, RPI5_UART);
+    }
+    else
+    {
+      strcpy(serial_dev, DEFAULT_UART);
+    }
+
     CHECK((wiringPiSetup() != -1), "Unable to initialize WiringPi");
-    CHECK(((fd = serialOpen(DEVICE_UART, SPEED_UART)) >= 0), "Unable to open serial");
+    CHECK(((fd = serialOpen(serial_dev, SPEED_UART)) >= 0), "Unable to open serial");
     LOGI("Serial Port OK");
   }
 
