@@ -3,6 +3,16 @@
 #include <unistd.h>
 #include <stdio.h>
 #include <string.h>
+#include <arpa/inet.h>
+#include <fcntl.h>
+#include <linux/if.h>
+#include <linux/if_tun.h>
+#include <sys/ioctl.h>
+#include <sys/types.h>
+#include <sys/socket.h>
+#include <tclap/CmdLine.h>
+#include <unistd.h>
+
 #include "nerfnet/net/network_manager.h"
 #include "nerfnet/net/nrf_link.h"
 #include "nerfnet/net/radio_transport.h"
