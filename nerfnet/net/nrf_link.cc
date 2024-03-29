@@ -17,6 +17,8 @@
 #include "nerfnet/net/nrf_link.h"
 
 #include <array>
+#include <string.h>
+#include <unistd.h>
 #include "nerfnet/util/log.h"
 
 // Leem:
