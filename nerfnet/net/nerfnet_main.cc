@@ -29,11 +29,7 @@
 #include "nerfnet/net/secondary_radio_interface.h"
 #include "nerfnet/util/log.h"
 
-// A description of the program.
-constexpr char kDescription[] =
-    "A tool for creating a network tunnel over cheap NRF24L01 radios.";
-
-// The version of the program.
+constexpr char kDescription[] = "A tool for creating a network tunnel over cheap NRF24L01 radios.";
 constexpr char kVersion[] = "0.0.1";
 
 // Sets flags for a given interface. Quits and logs the error on failure.
@@ -99,35 +95,18 @@ int main(int argc, char **argv)
 {
   // Parse command-line arguments.
   TCLAP::CmdLine cmd(kDescription, ' ', kVersion);
-  TCLAP::ValueArg<std::string> interface_name_arg("i", "interface_name",
-                                                  "Set to the name of the tunnel device.", false, "nerf0", "name", cmd);
-  TCLAP::ValueArg<uint16_t> ce_pin_arg("", "ce_pin",
-                                       "Set to the index of the NRF24L01 chip-enable pin.", false, 22, "index",
-                                       cmd);
-  TCLAP::SwitchArg primary_arg("", "primary",
-                               "Run this side of the network in primary mode.", false);
-  TCLAP::SwitchArg secondary_arg("", "secondary",
-                                 "Run this side of the network in secondary mode.", false);
-  TCLAP::ValueArg<std::string> tunnel_ip_arg("", "tunnel_ip",
-                                             "The IP address to assign to the tunnel interface.", false, "", "ip",
-                                             cmd);
-  TCLAP::ValueArg<std::string> tunnel_ip_mask("", "tunnel_mask",
-                                              "The network mask to use for the tunnel interface.", false,
-                                              "255.255.255.0", "mask", cmd);
+  TCLAP::ValueArg<std::string> interface_name_arg("i", "interface_name", "Set to the name of the tunnel device.", false, "nerf0", "name", cmd);
+  TCLAP::ValueArg<uint16_t> ce_pin_arg("", "ce_pin", "Set to the index of the NRF24L01 chip-enable pin.", false, 22, "index", cmd);
+  TCLAP::SwitchArg primary_arg("", "primary", "Run this side of the network in primary mode.", false);
+  TCLAP::SwitchArg secondary_arg("", "secondary", "Run this side of the network in secondary mode.", false);
+  TCLAP::ValueArg<std::string> tunnel_ip_arg("", "tunnel_ip", "The IP address to assign to the tunnel interface.", false, "", "ip", cmd);
+  TCLAP::ValueArg<std::string> tunnel_ip_mask("", "tunnel_mask", "The network mask to use for the tunnel interface.", false, "255.255.255.0", "mask", cmd);
   cmd.xorAdd(primary_arg, secondary_arg);
-  TCLAP::ValueArg<uint32_t> primary_addr_arg("", "primary_addr",
-                                             "The address to use for the primary side of nerfnet.",
-                                             false, 0x90019001, "address", cmd);
-  TCLAP::ValueArg<uint32_t> secondary_addr_arg("", "secondary_addr",
-                                               "The address to use for the secondary side of nerfnet.",
-                                               false, 0x90009000, "address", cmd);
-  TCLAP::ValueArg<uint8_t> channel_arg("", "channel",
-                                       "The channel to use for transmit/receive.", false, 1, "channel", cmd);
-  TCLAP::ValueArg<uint32_t> poll_interval_us_arg("", "poll_interval_us",
-                                                 "Used by the primary radio only to determine how often to poll.",
-                                                 false, 100, "microseconds", cmd);
-  TCLAP::SwitchArg enable_tunnel_logs_arg("", "enable_tunnel_logs",
-                                          "Set to enable verbose logs for read/writes from the tunnel.", cmd);
+  TCLAP::ValueArg<uint32_t> primary_addr_arg("", "primary_addr", "The address to use for the primary side of nerfnet.", false, 0x90019001, "address", cmd);
+  TCLAP::ValueArg<uint32_t> secondary_addr_arg("", "secondary_addr", "The address to use for the secondary side of nerfnet.", false, 0x90009000, "address", cmd);
+  TCLAP::ValueArg<uint8_t> channel_arg("", "channel", "The channel to use for transmit/receive.", false, 1, "channel", cmd);
+  TCLAP::ValueArg<uint32_t> poll_interval_us_arg("", "poll_interval_us", "Used by the primary radio only to determine how often to poll.", false, 100, "microseconds", cmd);
+  TCLAP::SwitchArg enable_tunnel_logs_arg("", "enable_tunnel_logs", "Set to enable verbose logs for read/writes from the tunnel.", cmd);
   cmd.parse(argc, argv);
 
   std::string tunnel_ip = tunnel_ip_arg.getValue();
@@ -148,11 +127,8 @@ int main(int argc, char **argv)
   LOGI("tunnel '%s' opened", interface_name_arg.getValue().c_str());
   SetInterfaceFlags(interface_name_arg.getValue(), IFF_UP);
   LOGI("tunnel '%s' up", interface_name_arg.getValue().c_str());
-  SetIPAddress(interface_name_arg.getValue(), tunnel_ip,
-               tunnel_ip_mask.getValue());
-  LOGI("tunnel '%s' configured with '%s' mask '%s'",
-       interface_name_arg.getValue().c_str(), tunnel_ip.c_str(),
-       tunnel_ip_mask.getValue().c_str());
+  SetIPAddress(interface_name_arg.getValue(), tunnel_ip, tunnel_ip_mask.getValue());
+  LOGI("tunnel '%s' configured with '%s' mask '%s'", interface_name_arg.getValue().c_str(), tunnel_ip.c_str(), tunnel_ip_mask.getValue().c_str());
 
   if (primary_arg.getValue())
   {
