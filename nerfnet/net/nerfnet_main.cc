@@ -3,6 +3,7 @@
 #include <unistd.h>
 #include <stdio.h>
 #include <string.h>
+#include <cstring>
 #include <arpa/inet.h>
 #include <fcntl.h>
 #include <linux/if.h>
@@ -119,7 +120,7 @@ int main(int argc, char **argv)
   LOGI("tunnel '%s' opened", "nerf0");
   SetInterfaceFlags("nerf0", IFF_UP);
   LOGI("tunnel '%s' up", "nerf0");
-  SetIPAddress("nerf0", tunnel_ip, "255.255.255.0");
+  SetIPAddress("nerf0", "192.168.10.1", "255.255.255.0");
   LOGI("tunnel '%s' configured with '%s' mask '%s'", "nerf0", "192.168.10.1", "255.255.255.0");
 
   // TODO(aarossig): Start the network manager and block until quit.
