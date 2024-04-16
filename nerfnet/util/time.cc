@@ -18,6 +18,7 @@
 
 #include <chrono>
 #include <unistd.h>
+#include <thread>
 
 namespace nerfnet
 {
