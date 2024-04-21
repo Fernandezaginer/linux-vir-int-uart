@@ -69,7 +69,10 @@ namespace nerfnet
       const std::vector<uint8_t> &request)
   {
 
-    serialPuts(fd, static_cast<const char *>(request));
+    serialWrite(fd, request.data(), request.size());
+    // return RequestResult::Success;
+
+    // serialPuts(fd, static_cast<const char *>(request));
     // printf("TX: ");
     // for (uint8_t val : request)
     // {
