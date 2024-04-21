@@ -68,12 +68,14 @@ namespace nerfnet
   RadioInterface::RequestResult RadioInterface::Send(
       const std::vector<uint8_t> &request)
   {
+
+    serialPuts(fd, request);
     // printf("TX: ");
-    for (uint8_t val : request)
-    {
-      serialPutchar(fd, val);
-      // printf("%d", val);
-    }
+    // for (uint8_t val : request)
+    // {
+    //   serialPutchar(fd, val);
+    //   // printf("%d", val);
+    // }
     // printf("\n");
     return RequestResult::Success;
   }
