@@ -69,10 +69,7 @@ namespace nerfnet
       const std::vector<uint8_t> &request)
   {
 
-    // serialPrintf(fd, request.data());
-
     serialPuts(fd, reinterpret_cast<const char *>(request.data()));
-    // return RequestResult::Success;
 
     // serialPuts(fd, static_cast<const char *>(request));
     // printf("TX: ");
@@ -82,6 +79,7 @@ namespace nerfnet
     //   // printf("%d", val);
     // }
     // printf("\n");
+
     return RequestResult::Success;
   }
 
