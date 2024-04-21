@@ -71,7 +71,7 @@ namespace nerfnet
 
     // serialPrintf(fd, request.data());
 
-    serialPuts(fd, static_cast<const char *>(request.data()));
+    serialPuts(fd, reinterpret_cast<const char *>(request.data()));
     // return RequestResult::Success;
 
     // serialPuts(fd, static_cast<const char *>(request));
