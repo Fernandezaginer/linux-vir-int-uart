@@ -69,9 +69,9 @@ namespace nerfnet
       const std::vector<uint8_t> &request)
   {
 
-    serialPrintf(fd, request.data());
+    // serialPrintf(fd, request.data());
 
-    serialPuts(fd, request.data(), request.size());
+    serialPuts(fd, static_cast<const char *> request.data());
     // return RequestResult::Success;
 
     // serialPuts(fd, static_cast<const char *>(request));
