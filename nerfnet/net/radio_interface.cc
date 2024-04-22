@@ -100,12 +100,12 @@ namespace nerfnet
         // printf("%d", response[i]);
         i++;
       }
-      if (timeout_us != 0 && (start_us + timeout_us) < TimeNowUs())
-      {
-        // printf("\n");
-        LOGE("Timeout receiving response");
-        return RequestResult::Timeout;
-      }
+      // if (timeout_us != 0 && (start_us + timeout_us) < TimeNowUs())
+      // {
+      //   // printf("\n");
+      //   LOGE("Timeout receiving response");
+      //   return RequestResult::Timeout;
+      // }
     }
     // printf("\n");
     return RequestResult::Success;
