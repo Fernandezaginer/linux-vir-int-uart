@@ -145,7 +145,7 @@ namespace nerfnet
   void RadioInterface::TunnelThread()
   {
     // The maximum number of network frames to buffer here.
-    constexpr size_t kMaxBufferedFrames = 1024;
+    constexpr size_t kMaxBufferedFrames = 256;
 
     running_ = true;
     uint8_t buffer[3200];
