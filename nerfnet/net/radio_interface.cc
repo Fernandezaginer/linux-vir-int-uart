@@ -157,7 +157,7 @@ namespace nerfnet
         LOGE("Failed to read: %s (%d)", strerror(errno), errno);
         continue;
       }
-
+      else
       {
         std::lock_guard<std::mutex> lock(read_buffer_mutex_);
         read_buffer_.emplace_back(&buffer[0], &buffer[bytes_read]);
@@ -167,10 +167,10 @@ namespace nerfnet
         }
       }
 
-      while (GetReadBufferSize() > kMaxBufferedFrames && running_)
-      {
-        SleepUs(1000);
-      }
+      // while (GetReadBufferSize() > kMaxBufferedFrames && running_)
+      // {
+      //   SleepUs(1000);
+      // }
     }
   }
 
