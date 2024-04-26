@@ -26,7 +26,7 @@
 
 #include "nerfnet/util/non_copyable.h"
 
-#define SPEED_UART 921600
+#define SPEED_UART 115200
 
 #define DEFAULT_UART "/dev/serial0"
 #define RPI5_UART "/dev/ttyAMA0"
