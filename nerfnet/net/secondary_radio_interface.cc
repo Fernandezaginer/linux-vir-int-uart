@@ -78,80 +78,11 @@ namespace nerfnet
 
   void SecondaryRadioInterface::HandleNetworkTunnelReset()
   {
-    next_id_ = 1;
-    last_ack_id_.reset();
-    frame_buffer_.clear();
-    payload_in_flight_ = false;
-
-    LOGI("Responding to tunnel reset request");
-    std::vector<uint8_t> response(kMaxPacketSize, 0x00);
-    auto status = Send(response);
-    if (status != RequestResult::Success)
-    {
-      LOGE("Failed to send tunnel reset response");
-    }
   }
 
   void SecondaryRadioInterface::HandleNetworkTunnelTxRx(
       const std::vector<uint8_t> &request)
   {
-    TunnelTxRxPacket tunnel;
-    if (!DecodeTunnelTxRxPacket(request, tunnel))
-    {
-      return;
-    }
-
-    WriteTunnel();
   }
 
-  if (tunnel.ack_id.has_value())
-  {
-    if (tunnel.ack_id.value() != next_id_)
-    {
-      LOGE("Primary radio failed to ack, retransmitting");
-    }
-    else
-    {
-      AdvanceID();
-      if (payload_in_flight_)
-      {
-        if (!read_buffer_.empty())
-        {
-          auto &frame = read_buffer_.front();
-          size_t transfer_size = GetTransferSize(frame);
-          frame.erase(frame.begin(), frame.begin() + transfer_size);
-          if (frame.empty())
-          {
-            read_buffer_.pop_front();
-          }
-        }
-
-        payload_in_flight_ = false;
-      }
-    }
-  }
-
-  tunnel.id = next_id_;
-  tunnel.ack_id = last_ack_id_.value();
-  tunnel.bytes_left = 0;
-  if (!read_buffer_.empty())
-  {
-    auto &frame = read_buffer_.front();
-    size_t transfer_size = GetTransferSize(frame);
-    tunnel.payload = {frame.begin(), frame.begin() + transfer_size};
-    tunnel.bytes_left = std::min(frame.size(), static_cast<size_t>(UINT8_MAX));
-    payload_in_flight_ = true;
-  }
-
-  std::vector<uint8_t> response;
-  if (!EncodeTunnelTxRxPacket(tunnel, response))
-  {
-    return;
-  }
-
-  auto status = Send(response);
-  if (status != RequestResult::Success)
-  {
-    LOGE("Failed to send network tunnel txrx response");
-  }
 }
