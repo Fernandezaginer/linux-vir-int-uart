@@ -155,5 +155,3 @@ namespace nerfnet
     LOGE("Failed to send network tunnel txrx response");
   }
 }
-
-} // namespace nerfnet
