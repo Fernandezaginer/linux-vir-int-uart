@@ -69,11 +69,11 @@ namespace nerfnet
       const std::vector<uint8_t> &request)
   {
     // printf("TX: ");
-    for (uint8_t val : request)
-    {
-      serialPutchar(fd, val);
-      // printf("%d", val);
-    }
+    // for (uint8_t val : request)
+    // {
+    //   serialPutchar(fd, val);
+    //   // printf("%d", val);
+    // }
     // printf("\n");
     return RequestResult::Success;
   }
@@ -95,13 +95,9 @@ namespace nerfnet
         // printf("%d", response[i]);
         i++;
       }
-      if (timeout_us != 0 && (start_us + timeout_us) < TimeNowUs())
-      {
-        // printf("\n");
-        LOGE("Timeout receiving response");
-        return RequestResult::Timeout;
-      }
     }
+
+    write(tunnel_fd_, response.data(), response.size());
     // printf("\n");
     return RequestResult::Success;
   }
@@ -140,7 +136,7 @@ namespace nerfnet
   void RadioInterface::TunnelThread()
   {
     // The maximum number of network frames to buffer here.
-    constexpr size_t kMaxBufferedFrames = 1024;
+    constexpr size_t kMaxBufferedFrames = 255;
 
     running_ = true;
     uint8_t buffer[3200];
@@ -152,19 +148,16 @@ namespace nerfnet
         LOGE("Failed to read: %s (%d)", strerror(errno), errno);
         continue;
       }
-
+      else
       {
-        std::lock_guard<std::mutex> lock(read_buffer_mutex_);
-        read_buffer_.emplace_back(&buffer[0], &buffer[bytes_read]);
-        if (tunnel_logs_enabled_)
+        for (int i = 0; i < bytes_read; i++)
         {
-          LOGI("Read %zu bytes from the tunnel", read_buffer_.back().size());
+          serialPutchar(fd, buffer[i]);
         }
       }
-
       while (GetReadBufferSize() > kMaxBufferedFrames && running_)
       {
-        SleepUs(1000);
+        SleepUs(100);
       }
     }
   }
@@ -172,36 +165,8 @@ namespace nerfnet
   bool RadioInterface::DecodeTunnelTxRxPacket(
       const std::vector<uint8_t> &request, TunnelTxRxPacket &tunnel)
   {
-    if (request.size() != kMaxPacketSize)
-    {
-      LOGE("Received short TxRx packet");
-      return false;
-    }
 
-    tunnel.id.reset();
-    uint8_t id_value = request[0] & kIDMask;
-    if (id_value != 0)
-    {
-      tunnel.id = id_value;
-    }
-
-    tunnel.ack_id.reset();
-    uint8_t ack_id_value = (request[0] >> 4) & kIDMask;
-    if (ack_id_value != 0)
-    {
-      tunnel.ack_id = ack_id_value;
-    }
-
-    tunnel.payload.clear();
-    uint8_t size_value = request[1];
-    tunnel.bytes_left = size_value;
-    if (size_value > 0)
-    {
-      size_value = std::min(size_value, static_cast<uint8_t>(kMaxPayloadSize));
-      tunnel.payload = {request.begin() + 2, request.begin() + 2 + size_value};
-    }
-
-    return true;
+    tunnel.payload = {request.begin(), request.end()};
   }
 
   bool RadioInterface::EncodeTunnelTxRxPacket(
@@ -235,8 +200,7 @@ namespace nerfnet
 
   void RadioInterface::WriteTunnel()
   {
-    int bytes_written = write(tunnel_fd_,
-                              frame_buffer_.data(), frame_buffer_.size());
+    int bytes_written = write(tunnel_fd_, frame_buffer_.data(), frame_buffer_.size());
     if (tunnel_logs_enabled_)
     {
       LOGI("Writing %d bytes to the tunnel", frame_buffer_.size());
@@ -248,5 +212,4 @@ namespace nerfnet
       LOGE("Failed to write to tunnel %s (%d)", strerror(errno), errno);
     }
   }
-
 } // namespace nerfnet

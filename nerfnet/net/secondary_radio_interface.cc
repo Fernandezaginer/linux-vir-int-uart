@@ -56,10 +56,6 @@ namespace nerfnet
     {
       std::vector<uint8_t> request(kMaxPacketSize, 0x00);
       auto result = Receive(request);
-      if (result == RequestResult::Success)
-      {
-        HandleRequest(request);
-      }
     }
   }
 
@@ -105,78 +101,59 @@ namespace nerfnet
       return;
     }
 
-    std::lock_guard<std::mutex> lock(read_buffer_mutex_);
-    if (!tunnel.id.has_value() || (last_ack_id_.has_value() && !tunnel.ack_id.has_value()))
-    {
-      LOGE("Missing tunnel fields");
-      return;
-    }
+    WriteTunnel();
+  }
 
-    if (!ValidateID(tunnel.id.value()))
+  if (tunnel.ack_id.has_value())
+  {
+    if (tunnel.ack_id.value() != next_id_)
     {
-      LOGE("Received non-sequential packet: %u vs %u",
-           last_ack_id_.value(), tunnel.id.value());
+      LOGE("Primary radio failed to ack, retransmitting");
     }
-    else if (!tunnel.payload.empty())
+    else
     {
-      frame_buffer_.insert(frame_buffer_.end(),
-                           tunnel.payload.begin(), tunnel.payload.end());
-      if (tunnel.bytes_left <= kMaxPayloadSize)
+      AdvanceID();
+      if (payload_in_flight_)
       {
-        WriteTunnel();
-      }
-    }
-
-    if (tunnel.ack_id.has_value())
-    {
-      if (tunnel.ack_id.value() != next_id_)
-      {
-        LOGE("Primary radio failed to ack, retransmitting");
-      }
-      else
-      {
-        AdvanceID();
-        if (payload_in_flight_)
+        if (!read_buffer_.empty())
         {
-          if (!read_buffer_.empty())
+          auto &frame = read_buffer_.front();
+          size_t transfer_size = GetTransferSize(frame);
+          frame.erase(frame.begin(), frame.begin() + transfer_size);
+          if (frame.empty())
           {
-            auto &frame = read_buffer_.front();
-            size_t transfer_size = GetTransferSize(frame);
-            frame.erase(frame.begin(), frame.begin() + transfer_size);
-            if (frame.empty())
-            {
-              read_buffer_.pop_front();
-            }
+            read_buffer_.pop_front();
           }
-
-          payload_in_flight_ = false;
         }
+
+        payload_in_flight_ = false;
       }
-    }
-
-    tunnel.id = next_id_;
-    tunnel.ack_id = last_ack_id_.value();
-    tunnel.bytes_left = 0;
-    if (!read_buffer_.empty())
-    {
-      auto &frame = read_buffer_.front();
-      size_t transfer_size = GetTransferSize(frame);
-      tunnel.payload = {frame.begin(), frame.begin() + transfer_size};
-      tunnel.bytes_left = std::min(frame.size(), static_cast<size_t>(UINT8_MAX));
-      payload_in_flight_ = true;
-    }
-
-    std::vector<uint8_t> response;
-    if (!EncodeTunnelTxRxPacket(tunnel, response))
-    {
-      return;
-    }
-
-    auto status = Send(response);
-    if (status != RequestResult::Success)
-    {
-      LOGE("Failed to send network tunnel txrx response");
     }
   }
+
+  tunnel.id = next_id_;
+  tunnel.ack_id = last_ack_id_.value();
+  tunnel.bytes_left = 0;
+  if (!read_buffer_.empty())
+  {
+    auto &frame = read_buffer_.front();
+    size_t transfer_size = GetTransferSize(frame);
+    tunnel.payload = {frame.begin(), frame.begin() + transfer_size};
+    tunnel.bytes_left = std::min(frame.size(), static_cast<size_t>(UINT8_MAX));
+    payload_in_flight_ = true;
+  }
+
+  std::vector<uint8_t> response;
+  if (!EncodeTunnelTxRxPacket(tunnel, response))
+  {
+    return;
+  }
+
+  auto status = Send(response);
+  if (status != RequestResult::Success)
+  {
+    LOGE("Failed to send network tunnel txrx response");
+  }
+}
 
 } // namespace nerfnet

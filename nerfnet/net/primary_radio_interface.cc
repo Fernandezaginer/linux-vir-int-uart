@@ -53,33 +53,11 @@ namespace nerfnet
 
   void PrimaryRadioInterface::Run()
   {
+    uint8_t packet[kMaxPacketSize];
     while (1)
     {
-      SleepUs(current_poll_interval_us_);
-      std::lock_guard<std::mutex> lock(read_buffer_mutex_);
-      if (connection_reset_required_)
-      {
-        LOGI("Resetting connection");
-        if (!ConnectionReset())
-        {
-          LOGE("Connection reset failed");
-          HandleTransactionFailure();
-        }
-        else
-        {
-          LOGI("Connection reset successfully");
-          connection_reset_required_ = false;
-        }
-      }
-      else if (PerformTunnelTransfer())
-      {
-        poll_fail_count_ = 0;
-        current_poll_interval_us_ = poll_interval_us_;
-      }
-      else
-      {
-        HandleTransactionFailure();
-      }
+      std::vector<uint8_t> request(kMaxPacketSize, 0x00);
+      auto result = Receive(request);
     }
   }
 
