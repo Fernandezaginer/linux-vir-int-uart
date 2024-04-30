@@ -62,7 +62,7 @@ namespace nerfnet
       int bytes_read = read(tunnel_fd_, buffer, sizeof(buffer));
       if (bytes_read < 0)
       {
-        LOGE("Failed to read: %s (%d)", strerror(errno), errno);
+        // LOGE("Failed to read: %s (%d)", strerror(errno), errno);
         continue;
       }
       else
