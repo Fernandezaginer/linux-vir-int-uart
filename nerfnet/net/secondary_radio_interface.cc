@@ -17,6 +17,7 @@
 #include "nerfnet/net/secondary_radio_interface.h"
 
 #include <unistd.h>
+#include <wiringSerial.h>
 #include <vector>
 
 #include "nerfnet/util/log.h"
