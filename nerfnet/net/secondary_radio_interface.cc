@@ -50,13 +50,45 @@ namespace nerfnet
 
   void SecondaryRadioInterface::Run()
   {
-    uint8_t packet[kMaxPacketSize];
 
-    while (1)
+    constexpr size_t kMaxBufferedFrames = 255;
+
+    running_ = true;
+    uint8_t buffer[3200];
+    while (running_)
     {
-      std::vector<uint8_t> request(kMaxPacketSize, 0x00);
-      auto result = Receive(request);
+      int bytes_read = read(tunnel_fd_, buffer, sizeof(buffer));
+      if (bytes_read < 0)
+      {
+        LOGE("Failed to read: %s (%d)", strerror(errno), errno);
+        continue;
+      }
+      else
+      {
+        printf("TX: \n");
+        for (int i = 0; i < bytes_read; i++)
+        {
+          serialPutchar(fd, buffer[i]);
+        }
+      }
+
+      while (serialDataAvail(fd))
+      {
+        printf("RX: \n");
+        uint8_t data;
+        data = serialGetchar(fd);
+        serialFlush(fd);
+        write(tunnel_fd_, &data, 1);
+      }
     }
+
+    // uint8_t packet[kMaxPacketSize];
+
+    // while (1)
+    // {
+    //   std::vector<uint8_t> request(kMaxPacketSize, 0x00);
+    //   auto result = Receive(request);
+    // }
   }
 
   void SecondaryRadioInterface::HandleRequest(
