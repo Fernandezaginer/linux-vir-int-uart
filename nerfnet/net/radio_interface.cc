@@ -140,26 +140,10 @@ namespace nerfnet
           serialPutchar(fd, buffer[i]);
         }
       }
-
-      if (serialDataAvail(fd))
+      
+      while (serialDataAvail(fd))
       {
-
-        std::vector<uint8_t> response(kMaxPacketSize);
-        int i = 0;
-        while (i < response.size())
-        {
-          if (serialDataAvail(fd))
-          {
-            if (i == 0)
-            {
-              printf("RX: \n");
-            }
-            response[i] = serialGetchar(fd);
-            // printf("%d", response[i]);
-            i++;
-          }
-        }
-        write(tunnel_fd_, response.data(), response.size());
+        write(tunnel_fd_, serialGetchar(fd), 1);
       }
     }
   }
