@@ -144,7 +144,7 @@ namespace nerfnet
       {
 
         std::vector<uint8_t> response(kMaxPacketSize);
-
+        int i = 0;
         while (i < response.size())
         {
           if (serialDataAvail(fd))
