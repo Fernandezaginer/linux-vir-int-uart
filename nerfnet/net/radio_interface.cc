@@ -82,21 +82,6 @@ namespace nerfnet
       std::vector<uint8_t> &response, uint64_t timeout_us)
   {
     int i = 0;
-    while (i < response.size())
-    {
-      if (serialDataAvail(fd))
-      {
-        if (i == 0)
-        {
-          printf("RX: ");
-        }
-        response[i] = serialGetchar(fd);
-        // printf("%d", response[i]);
-        i++;
-      }
-    }
-
-    write(tunnel_fd_, response.data(), response.size());
     // printf("\n");
     return RequestResult::Success;
   }
@@ -154,9 +139,26 @@ namespace nerfnet
           serialPutchar(fd, buffer[i]);
         }
       }
-      while (GetReadBufferSize() > kMaxBufferedFrames && running_)
+
+      if (serialDataAvail(fd))
       {
-        SleepUs(100);
+
+        std::vector<uint8_t> response(kMaxPacketSize);
+
+        while (i < response.size())
+        {
+          if (serialDataAvail(fd))
+          {
+            if (i == 0)
+            {
+              printf("RX: ");
+            }
+            response[i] = serialGetchar(fd);
+            // printf("%d", response[i]);
+            i++;
+          }
+        }
+        write(tunnel_fd_, response.data(), response.size());
       }
     }
   }
