@@ -140,10 +140,12 @@ namespace nerfnet
           serialPutchar(fd, buffer[i]);
         }
       }
-      
+
       while (serialDataAvail(fd))
       {
-        write(tunnel_fd_, serialGetchar(fd), 1);
+        uint8_t data;
+        data = serialGetchar(fd);
+        write(tunnel_fd_, &data, 1);
       }
     }
   }
