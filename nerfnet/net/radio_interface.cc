@@ -143,6 +143,7 @@ namespace nerfnet
 
       while (serialDataAvail(fd))
       {
+        printf("RX: \n");
         uint8_t data;
         data = serialGetchar(fd);
         write(tunnel_fd_, &data, 1);
