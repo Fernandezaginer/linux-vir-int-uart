@@ -134,6 +134,7 @@ namespace nerfnet
       }
       else
       {
+        printf("TX: \n");
         for (int i = 0; i < bytes_read; i++)
         {
           serialPutchar(fd, buffer[i]);
@@ -151,7 +152,7 @@ namespace nerfnet
           {
             if (i == 0)
             {
-              printf("RX: ");
+              printf("RX: \n");
             }
             response[i] = serialGetchar(fd);
             // printf("%d", response[i]);
