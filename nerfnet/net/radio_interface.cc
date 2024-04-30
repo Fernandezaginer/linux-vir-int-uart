@@ -146,8 +146,8 @@ namespace nerfnet
         printf("RX: \n");
         uint8_t data;
         data = serialGetchar(fd);
+        serialFlush(fd);
         write(tunnel_fd_, &data, 1);
-        flushall(tunnel_fd_);
       }
     }
   }
