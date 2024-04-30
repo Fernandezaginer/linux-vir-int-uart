@@ -82,15 +82,14 @@ namespace nerfnet
       std::vector<uint8_t> &response, uint64_t timeout_us)
   {
     int i = 0;
-    uint64_t start_us = TimeNowUs();
     while (i < response.size())
     {
       if (serialDataAvail(fd))
       {
-        // if (i == 0)
-        // {
-        //   printf("RX: ");
-        // }
+        if (i == 0)
+        {
+          printf("RX: ");
+        }
         response[i] = serialGetchar(fd);
         // printf("%d", response[i]);
         i++;
